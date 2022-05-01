@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb")
 
 module.exports = {
     name: "User",
@@ -10,7 +11,8 @@ module.exports = {
 
             register: async (email) => {
                 let result = await col.collection.insertOne({
-                    email: email
+                    email: email,
+                    collection: []
                 })
                 return result.insertedId.toString()
             },
@@ -20,8 +22,25 @@ module.exports = {
                     email: email
                 })
                 return result._id.toString()
-            }
+            },
             
+            get: async (userid) => {
+                let result = await col.collection.findOne({
+                    _id: ObjectId(userid)
+                })
+                return result
+            },
+
+            add_file: async (userid, fileid) => {
+                return await col.collection.updateOne({
+                    _id: ObjectId(userid)
+                }, {
+                    $addToSet: {
+                        collection: fileid
+                    }
+                })
+            }
+
         }
     }
 }

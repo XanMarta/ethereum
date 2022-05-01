@@ -1,4 +1,3 @@
-
 const express = require("express")
 const bodyParser = require("body-parser")
 const cors = require("cors")
@@ -22,16 +21,9 @@ app.use(cors({
 (async () => {
     
     await lms.init()
-
     await db.connect_db()
 
-    // lms.lms.getHash("123")
-    //     .then((_hash) => console.log(_hash))
-
-    // lms.lms.sendIPFS("1234", "hash12345xyz", { from: accounts[0] })
-
     app.use(require("./src/routes"));
-
     app.listen(8000, () => console.log("Listening on port 8000 ..."))
 
 })();

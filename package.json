@@ -19,6 +19,7 @@
     "helmet": "^5.0.2",
     "ipfs-api": "^26.1.2",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
     "mongodb": "^4.5.0",
     "nodemon": "^2.0.15",
     "shortid": "^2.2.16",

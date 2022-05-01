@@ -45,6 +45,7 @@ db.connect_db = async () => {   // Must be called first
 // Set collection
 
 db.User = _init(require("./user.model"))
+db.Metadata = _init(require("./metadata.model"))
 
 
 module.exports = db

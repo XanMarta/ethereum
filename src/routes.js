@@ -1,6 +1,9 @@
 const shortid = require("shortid")
+const _ = require("lodash")
+const stream = require("stream")
 const router = require("express").Router()
 const User = require("./database").User
+const Metadata = require("./database").Metadata
 const jwt = require("./token")
 const ipfs = require("./ipfs")
 const lms = require("./lms")
@@ -19,6 +22,17 @@ const auth = (req, res, next) => {
             next()
         }
     }
+}
+
+
+const send_buffer = async (buffer, filename, res) => {
+    if (!filename) {
+        filename = "file"
+    }
+    let readstream = new stream.PassThrough()
+    readstream.end(buffer)
+    res.set("Content-disposition", "attachment; filename=" + filename)
+    readstream.pipe(res)
 }
 
 
@@ -58,37 +72,88 @@ router.get("/auth", auth, async (req, res) => {
 
 
 router.post("/upload", auth, async (req, res) => {
-    if (!req.files) {
+    if (!req.files.file) {
         res.status(400).send("File not found")
     } else {
-        if (!req.files.file) {
-            res.status(400).send("Invalid request")
+        let fileid = req.body.fileid
+        if (!fileid) {
+            fileid = shortid.generate() + shortid.generate()
         } else {
-            let fileid = shortid.generate() + shortid.generate()
-            let filename = req.files.file.name
-            let filebuffer = req.files.file.data
-            // Hash
-            // let _hash = await ipfs.ipfs_add(filebuffer)
-            let _hash = "1234"
-            try {
-                await lms.addHash(fileid, req.userid, _hash)
-                // Save to database
-                res.send(fileid)
-            } catch (err) {
-                res.status(400).send("Invalid owner")
-                console.log(err)
-            }
+            fileid = fileid.replace(/\W/g, "_")
+        }
+        let filename = req.files.file.name
+        let filebuffer = req.files.file.data
+        // Hash
+        let _hash = await ipfs.ipfs_add(filebuffer)
+        // let _hash = shortid.generate()  // Fake hash
+        try {
+            await lms.addHash(fileid, req.userid, _hash)
+            await Metadata.add(fileid, filename)
+            await User.add_file(req.userid, fileid)
+            res.send(fileid)
+        } catch (err) {
+            res.status(400).send("Invalid owner")
+            console.log(err)
         }
     }
 })
 
 
-router.post("/download", auth, async (req, res) => {
-    if (!req.body.id) {
-        res.status(400).send("Invalid parameter")
-    } else {
-        let result = await lms.viewHash(req.body.id)
-        res.send(result)
+router.post("/view/:fileid", async (req, res) => {
+    try {
+        let result = await lms.viewHash(req.params.fileid)
+        let owner = await User.get(result.owner)
+        res.send({
+            owner: owner,
+            versions: result.versions
+        })
+    } catch (err) {
+        res.status(400).send("Invalid file")
+    }
+})
+
+
+router.get("/list", auth, async (req, res) => {
+    let result = await User.get(req.userid)
+    res.send(result.collection)
+})
+
+
+router.get("/list/:userid", async (req, res) => {
+    let result = await User.get(req.params.userid)
+    res.send(result.collection)
+})
+
+
+router.get("/download/:fileid", async (req, res) => {
+    try {
+        let result = await lms.viewHash(req.params.fileid)
+        let _hash = _.last(result.versions)
+        let metadata = await Metadata.get(req.params.fileid)
+        let _name = _.last(metadata.versions).name
+        let buffer = await ipfs.ipfs_get(_hash)
+        await send_buffer(buffer, _name, res)
+    } catch (err) {
+        res.status(400).send("File not found")
+    }
+})
+
+
+router.get("/download/:fileid/:versionid", async (req, res) => {
+    try {
+        let result = await lms.viewHash(req.params.fileid)
+        let vid = parseInt(req.params.versionid)
+        if (vid != NaN && _.inRange(vid, result.versions.length)) {
+            let _hash = result.versions[vid]
+            let metadata = await Metadata.get(req.params.fileid)
+            let _name = metadata.versions[vid].name
+            let buffer = await ipfs.ipfs_get(_hash)
+            await send_buffer(buffer, _name, res)
+        } else {
+            res.status(400).send("File not found")
+        }
+    } catch (err) {
+        res.status(400).send("File not found")
     }
 })
 

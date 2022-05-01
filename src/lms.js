@@ -27,7 +27,7 @@ ether.viewHash = async (fileid) => {
     let result = await ether.lms.viewHash(fileid)
     return {
         owner: result[0],
-        version: result[1],
+        versions: result[1],
         isValue: result[2]
     }
 }

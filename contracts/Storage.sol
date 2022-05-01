@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 contract Storage {
     struct File {
         string owner;
-        string[] version;
+        string[] versions;
         bool isValue;
     }
 
@@ -16,11 +16,11 @@ contract Storage {
         if (_file.isValue) {
             string memory _owner = _file.owner;
             require(keccak256(bytes(_userid)) == keccak256(bytes(_owner)));
-            _file.version.push(_hash);
+            _file.versions.push(_hash);
         } else {
             _file.isValue = true;
             _file.owner = _userid;
-            _file.version.push(_hash);
+            _file.versions.push(_hash);
         }
     }
 
