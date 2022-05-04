@@ -16,7 +16,9 @@
     <div class="fill-available">
 
       <!-- Login status -->
-      <i><p id="loginStatus"></p></i>
+      <i>
+        <p id="loginStatus"></p>
+      </i>
       <hr>
 
       <!--Register-->
@@ -54,24 +56,42 @@
       <button type="submit" id="viewFileButton">View</button>
       <br>
       <div id="viewFileInfo" style="display: none;">
-        File ID: <p id="viewFileID"></p>
-        File name: <p id="viewFileName"></p>
-        Owner: <p id="viewFileOwner"></p>
         <!--Table of view file-->
-        <div class="d-flex justify-content-center">
-          <table class="table table-sm" style="width: 50%; align-items: center">
-            <thead>
-              <tr>
-                <th scope="col">No</th>
-                <th scope="col">Hash</th>
-                <th scope="col">File Name</th>
-                <th scope="col">Updated Date</th>
-              </tr>
-            </thead>
-            <tbody id="viewVersions">
-            </tbody>
-          </table>
-        </div>
+        <table class="table table-sm" style="width: 50%; align-items: center">
+          <thead>
+            <tr>
+              <th colspan="2" scope="colgroup">
+                <!-- <section>
+                    File ID: <p id="viewFileID"></p>
+                  </section>
+                  <section style="margin-left: 50rem;">
+                    File name: <p id="viewFileName"></p>
+                  </section>
+                  <section>
+                    Owner: <p id="viewFileOwner"></p>
+                  </section> -->
+                <div class="row">
+                  <div class="col" class="d-flex justify-content-end">
+                    File ID: <p id="viewFileID"></p>
+                    File name: <p id="viewFileName"></p>
+                  </div>
+
+                  <div class="col">
+                    Owner: <p id="viewFileOwner"></p>
+                  </div>
+                </div>
+              </th>
+            </tr>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Hash</th>
+              <th scope="col">File Name</th>
+              <th scope="col">Updated Date</th>
+            </tr>
+          </thead>
+          <tbody id="viewVersions">
+          </tbody>
+        </table>
       </div>
       <hr>
 
