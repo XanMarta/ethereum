@@ -16,6 +16,7 @@ app.use(cors({
     origin: "*",
     exposedHeaders: ["token"]
 }));
+app.use(express.static("./public"));
 
 
 (async () => {
@@ -24,6 +25,6 @@ app.use(cors({
     await db.connect_db()
 
     app.use(require("./src/routes"));
-    app.listen(8000, () => console.log("Listening on port 8000 ..."))
+    app.listen(3000, () => console.log("Listening on port 3000 ..."))
 
 })();

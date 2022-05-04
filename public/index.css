@@ -1,0 +1,18 @@
+#container {
+  border: 1px solid black;
+  padding: 0.5em;
+  margin: 0.5em;
+}
+
+#container > div {
+  padding: 0.5em;
+  margin: 0.5em;
+}
+
+.fill-available {
+  width: -webkit-fill-available;
+}
+
+table, th, td {
+  border:1px solid black;
+}

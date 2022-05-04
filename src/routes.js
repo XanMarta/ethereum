@@ -99,16 +99,26 @@ router.post("/upload", auth, async (req, res) => {
 })
 
 
-router.post("/view/:fileid", async (req, res) => {
+router.get("/view/:fileid", async (req, res) => {
     try {
-        let result = await lms.viewHash(req.params.fileid)
-        let owner = await User.get(result.owner)
+        let hash = await lms.viewHash(req.params.fileid)
+        let owner = await User.get(hash.owner)
+        let metadata = await Metadata.get(req.params.fileid)
+        let versions = []
+        for (var i = 0; i < hash.versions.length; i++) {
+            versions.push({
+                hash: hash.versions[i],
+                name: metadata.versions[i].name,
+                creationTime: metadata.versions[i].creationTime
+            })
+        }
         res.send({
-            owner: owner,
-            versions: result.versions
+            owner: owner.email,
+            name: metadata.name,
+            versions: versions
         })
     } catch (err) {
-        res.status(400).send("Invalid file")
+        res.status(400).send("File not found")
     }
 })
 

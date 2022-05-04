@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <link href="./script/bootstrap.min.css" rel="stylesheet">
+  <script src="./script/axios.min.js"></script>
+  <title>IPFS test</title>
+</head>
+
+<body>
+  <div id="container">
+    <div class="fill-available">
+
+      <!-- Login status -->
+      <i><p id="loginStatus"></p></i>
+      <hr>
+
+      <!--Register-->
+      <h2>Register an account</h2>
+      <br>
+      Email: <input type="email" id="emailInputRegister" placeholder="Enter your email here">
+      <button type="submit" id="registerButton">Register</button>
+      <hr>
+
+      <!--Login-->
+      <h2>Login</h2>
+      Login: <input type="email" id="emailInputLogin" placeholder="Enter your email here">
+      <button type="submit" id="loginButton">Login</button>
+      <hr>
+
+      <!-- Logout -->
+      <h2>Logout</h2>
+      <button type="submit" id="logoutButton">Logout</button>
+      <hr>
+
+      <!--Upload-->
+      <h2>Upload</h2>
+      <br>
+      <input type="file" id="uploadFile" name="uploadFile">
+      <br>
+      File ID: <input type="text" id="fileID">
+      <button type="submit" id="uploadFileButton">Upload</button>
+      <br>
+      <p id="uploadStatus"></p>
+      <hr>
+
+      <!--View file-->
+      <h2>View file:</h2>
+      File ID: <input type="text" id="fileIDInput">
+      <button type="submit" id="viewFileButton">View</button>
+      <br>
+      <div id="viewFileInfo" style="display: none;">
+        File ID: <p id="viewFileID"></p>
+        File name: <p id="viewFileName"></p>
+        Owner: <p id="viewFileOwner"></p>
+        <!--Table of view file-->
+        <div class="d-flex justify-content-center">
+          <table class="table table-sm" style="width: 50%; align-items: center">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Hash</th>
+                <th scope="col">File Name</th>
+                <th scope="col">Updated Date</th>
+              </tr>
+            </thead>
+            <tbody id="viewVersions">
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <hr>
+
+      <!--List own file-->
+      <h2>List own file:</h2>
+      <button type="submit" id="listFileButton">List</button>
+      <div id="listFileInfo" style="display: none;">
+        <table class="table" style="width: 50%; align-items: center">
+          <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">File ID</th>
+            </tr>
+          </thead>
+          <tbody id="listFiles">
+          </tbody>
+        </table>
+      </div>
+      <hr>
+
+    </div>
+  </div>
+  <footer style="float: right;"><i>IPFS Demo by group 4</i></footer>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script> -->
+  <script type="module" src="./index.js"></script>
+</body>
+
+</html>
