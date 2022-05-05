@@ -7,3 +7,9 @@ build/
 test.js
 
 package-lock.json
+
+.secrets
+
+secrets.json
+
+*.zip
