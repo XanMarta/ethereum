@@ -25,6 +25,10 @@ const listButton = document.querySelector("#listFileButton");
 const listFileInfo = document.querySelector("#listFileInfo");
 const listFiles = document.querySelector("#listFiles");
 
+const ulistButton = document.querySelector("#ulistButton")
+const ulistEmailInput = document.querySelector("#ulistEmailInput")
+const ulistInfo = document.querySelector("#ulistInfo")
+const ulistFiles = document.querySelector("#ulistFiles")
 
 
 window.onload = () => {
@@ -162,4 +166,33 @@ listButton.addEventListener("click", function () {
       }
     })
     .catch(err => alert(`Error: ${err.response.data}`))
+})
+
+
+ulistButton.addEventListener("click", function () {
+  if (ulistEmailInput.value == "") {
+    alert("Invalid email")
+  } else {
+    axios({
+      method: "post",
+      url: "/ulist",
+      data: {
+        email: ulistEmailInput.value
+      }
+    })
+      .then(res => {
+        ulistInfo.style.display = "block"
+        let files = res.data
+        ulistFiles.innerHTML = ""
+        for (var i = 0; i < files.length; i++) {
+          ulistFiles.innerHTML += `
+            <tr>
+              <th scope="row">${i + 1}</th>
+              <td>${files[i]}</td>
+            </tr>`
+        }
+      })
+      .catch(err => alert(`Error: ${err.response.data}`))
+  }
+  
 })

@@ -31,6 +31,13 @@ module.exports = {
                 return result
             },
 
+            get_e: async (email) => {
+                let result = await col.collection.findOne({
+                    email: email
+                })
+                return result
+            },
+
             add_file: async (userid, fileid) => {
                 return await col.collection.updateOne({
                     _id: ObjectId(userid)

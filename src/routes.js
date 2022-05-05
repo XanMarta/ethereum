@@ -12,11 +12,11 @@ const lms = require("./lms")
 const auth = (req, res, next) => {
     const token = req.header("token")
     if (!token) {
-        res.status(400).send("Invalid token")
+        res.status(400).send("Not login yet")
     } else {
         const decoded = jwt.verify(token)
         if (!decoded) {
-            res.status(400).send("Invalid token")
+            res.status(400).send("Not login yet")
         } else {
             req.userid = decoded
             next()
@@ -129,9 +129,13 @@ router.get("/list", auth, async (req, res) => {
 })
 
 
-router.get("/list/:userid", async (req, res) => {
-    let result = await User.get(req.params.userid)
-    res.send(result.collection)
+router.post("/ulist", async (req, res) => {
+    try {
+        let result = await User.get_e(req.body.email)
+        res.send(result.collection)
+    } catch (err) {
+        res.status(400).send("User not found")
+    }
 })
 
 
